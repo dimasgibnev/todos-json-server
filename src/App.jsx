@@ -1,49 +1,64 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './App.module.css';
-import { Loader, TodoItem } from './components';
+import { Button, Loader, TodoList, AddForm } from './components';
+import {
+	useRequestAddTodo,
+	useRequestGetTodoList,
+	useRequestDeleteTodo,
+	useRequestUpdateTodo,
+} from './hooks';
 
 export const App = () => {
-	const [isLoading, setIsLoading] = useState(true);
-	const [todoList, setTodoList] = useState([
-		{
-			userId: 1,
-			id: 201,
-			title: 'Выполнить домашнее задание, реализовать список дел',
-			completed: false,
-		},
-	]);
+	const [refreshTodos, setRefreshTodos] = useState(false);
+	const [isUpdating, setIsUpdating] = useState(false);
+	const [todoText, setTodoText] = useState('');
 
-	useEffect(() => {
-		setIsLoading(true);
-		fetch('https://jsonplaceholder.typicode.com/todos')
-			.then((response) => response.json())
-			.then((loadedTodos) => setTodoList((prev) => [...prev, ...loadedTodos]))
-			.catch((error) => {
-				console.error('Ошибка при загрузке данных:', error);
-			})
-			.finally(() => {
-				setTimeout(() => {
-					setIsLoading(false);
-				}, 2000);
-			});
-	}, []);
+	const { requestAddTodo, isCreating, handleClick } = useRequestAddTodo(
+		todoText,
+		setRefreshTodos,
+	);
+	const { todoList, isLoading, handleCheck } = useRequestGetTodoList(refreshTodos);
+	const { requestDeleteTodo, isDeleting } = useRequestDeleteTodo(setRefreshTodos);
+	const { requestUpdateTodo } = useRequestUpdateTodo(setRefreshTodos, todoText);
 
-	const handleCheck = (id) => {
-		const updatedList = todoList.map((todo) => {
-			if (todo.id === id) {
-				return { ...todo, completed: !todo.completed };
-			}
-			return todo;
-		});
-		setTodoList(updatedList);
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		requestAddTodo();
 	};
 
 	return (
 		<div className={styles.App}>
+			{isCreating && (
+				<AddForm
+					onClick={handleClick}
+					setTodoText={setTodoText}
+					handleSubmit={handleSubmit}
+				/>
+			)}
+
 			{isLoading ? (
 				<Loader />
 			) : (
-				<TodoItem todoList={todoList} handleCheck={handleCheck} />
+				<>
+					<Button
+						isActive={isCreating || isUpdating || isDeleting}
+						name={'todo-add-btn'}
+						label={'Добавить задачу'}
+						onClick={handleClick}
+					/>
+					<div>
+						<TodoList
+							setIsUpdating={setIsUpdating}
+							setTodoText={setTodoText}
+							isUpdating={isUpdating}
+							requestUpdateTodo={requestUpdateTodo}
+							RequestDeleteTodo={requestDeleteTodo}
+							isActive={isCreating || isUpdating || isDeleting}
+							todoList={todoList}
+							handleCheck={handleCheck}
+						/>
+					</div>
+				</>
 			)}
 		</div>
 	);
