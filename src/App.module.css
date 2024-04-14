@@ -1,0 +1,18 @@
+body {
+	margin: 0;
+	background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+	background-attachment: fixed;
+}
+#root {
+	display: flex;
+	justify-content: center;
+}
+.App {
+	position: relative;
+	width: 100vh;
+	height: 100vh;
+	margin: 0 auto;
+	padding: 10px;
+}
+
+
