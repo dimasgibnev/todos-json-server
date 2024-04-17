@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const useRequestAddTodo = (todoText, setRefreshTodos) => {
+export const useRequestAddTodo = (todoText, setRefreshTodos, setTodoText) => {
 	const [isCreating, setIsCreating] = useState(false);
 
 	const requestAddTodo = () => {
@@ -23,7 +23,8 @@ export const useRequestAddTodo = (todoText, setRefreshTodos) => {
 	};
 
 	const handleClick = () => {
-		setIsCreating(true);
+		setIsCreating(!isCreating);
+		setTodoText('')
 	};
 
 	return { requestAddTodo, isCreating, handleClick };

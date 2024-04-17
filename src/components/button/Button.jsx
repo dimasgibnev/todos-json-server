@@ -1,6 +1,6 @@
 import styles from './Button.module.css';
 
-export const Button = ({name, label, isActive, onClick, id, type }) => {
+export const Button = ({ name, label, isActive, onClick, id, type }) => {
 	return (
 		<button
 			type={type}

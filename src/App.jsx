@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styles from './App.module.css';
-import { Button, Loader, TodoList, AddForm } from './components';
+import { Button, Loader, TodoList, InputForm, Select } from './components';
 import {
 	useRequestAddTodo,
 	useRequestGetTodoList,
@@ -9,30 +9,51 @@ import {
 } from './hooks';
 
 export const App = () => {
+	const [selectedSort, setSelectedSort] = useState(false);
 	const [refreshTodos, setRefreshTodos] = useState(false);
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [todoText, setTodoText] = useState('');
+	const [searchTerm, setSearchTerm] = useState('');
 
 	const { requestAddTodo, isCreating, handleClick } = useRequestAddTodo(
 		todoText,
 		setRefreshTodos,
+		setTodoText,
 	);
 	const { todoList, isLoading, handleCheck } = useRequestGetTodoList(refreshTodos);
 	const { requestDeleteTodo, isDeleting } = useRequestDeleteTodo(setRefreshTodos);
 	const { requestUpdateTodo } = useRequestUpdateTodo(setRefreshTodos, todoText);
 
-	const handleSubmit = (event) => {
-		event.preventDefault();
-		requestAddTodo();
+	const sortTodos = () => {
+		setSelectedSort(!selectedSort);
 	};
 
+	const handleSearch = (event) => {
+		setSearchTerm(event.target.value.toLowerCase());
+	};
+
+	const filteredTodos = todoList.filter((todo) =>
+		todo.title.toLowerCase().includes(searchTerm),
+	);
+
+	const getSortedTodos = () => {
+		if (selectedSort) {
+			return [...todoList].sort((a, b) => a['title'].localeCompare(b['title']));
+		} else if (searchTerm) {
+			return filteredTodos;
+		}
+		return todoList;
+	};
+
+	const sortedTodos = getSortedTodos();
 	return (
 		<div className={styles.App}>
 			{isCreating && (
-				<AddForm
-					onClick={handleClick}
+				<InputForm
+					label={'Создать'}
 					setTodoText={setTodoText}
-					handleSubmit={handleSubmit}
+					todoText={todoText}
+					handleSubmit={requestAddTodo}
 				/>
 			)}
 
@@ -46,6 +67,27 @@ export const App = () => {
 						label={'Добавить задачу'}
 						onClick={handleClick}
 					/>
+					{selectedSort ? (
+						<Button
+							isActive={isCreating || isUpdating || isDeleting}
+							onClick={sortTodos}
+							label={'По созданию'}
+						/>
+					) : (
+						<Button
+							isActive={isCreating || isUpdating || isDeleting}
+							onClick={sortTodos}
+							label={'По алфавиту'}
+						/>
+					)}
+
+					<input
+						placeholder="Поиск..."
+						className={styles.input}
+						type="text"
+						value={searchTerm}
+						onChange={handleSearch}
+					/>
 					<div>
 						<TodoList
 							setIsUpdating={setIsUpdating}
@@ -54,8 +96,9 @@ export const App = () => {
 							requestUpdateTodo={requestUpdateTodo}
 							RequestDeleteTodo={requestDeleteTodo}
 							isActive={isCreating || isUpdating || isDeleting}
-							todoList={todoList}
+							todoList={sortedTodos}
 							handleCheck={handleCheck}
+							todoText={todoText}
 						/>
 					</div>
 				</>

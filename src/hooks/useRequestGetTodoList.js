@@ -23,5 +23,5 @@ export const useRequestGetTodoList = (refreshTodos) => {
 		setTodoList(updatedList);
 	};
 
-	return { todoList, isLoading, handleCheck };
+	return { todoList, isLoading, handleCheck, setTodoList};
 };

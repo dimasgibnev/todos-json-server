@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Button, UpdateForm, TodoItem } from '..';
+import { Button, InputForm, TodoItem } from '..';
 import styles from './TodoList.module.css';
+
 
 export const TodoList = ({
 	todoList,
@@ -11,6 +12,7 @@ export const TodoList = ({
 	isUpdating,
 	setTodoText,
 	setIsUpdating,
+	todoText
 }) => {
 	const [editingId, setEditingId] = useState(null);
 
@@ -22,9 +24,11 @@ export const TodoList = ({
 	return (
 		<>
 			{isUpdating && (
-				<UpdateForm
+				<InputForm
+				label={'Изменить'}
 					setTodoText={setTodoText}
 					handleSubmit={() => handleUpdate(editingId)}
+					todoText={todoText}
 				/>
 			)}
 			{todoList.map(({ id, title, completed }, index) => (

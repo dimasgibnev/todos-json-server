@@ -4,7 +4,7 @@ export const useRequestDeleteTodo = (setRefreshTodos) => {
 	const [isDeleting, setIsDeleting] = useState(false);
 
 	const requestDeleteTodo = (id) => {
-		setIsDeleting(true)
+		setIsDeleting(true);
 		fetch(`http://localhost:3005/todos/${id}`, {
 			method: 'DELETE',
 		})
@@ -13,7 +13,7 @@ export const useRequestDeleteTodo = (setRefreshTodos) => {
 				setRefreshTodos((prev) => !prev);
 			})
 			.catch((error) => console.log('Ошибка', error))
-			.finally(()=> setIsDeleting(false))
+			.finally(() => setIsDeleting(false));
 	};
 
 	return { requestDeleteTodo, isDeleting };
