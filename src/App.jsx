@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import styles from './App.module.css';
-import { Button, Loader, TodoList, InputForm, Select } from './components';
+import { Button, Loader, TodoList, InputForm } from './components';
+import { Route, Routes } from 'react-router-dom';
 import {
 	useRequestAddTodo,
 	useRequestGetTodoList,
@@ -8,17 +9,18 @@ import {
 	useRequestUpdateTodo,
 } from './hooks';
 
-export const App = () => {
+const MainPage = () => {
 	const [selectedSort, setSelectedSort] = useState(false);
 	const [refreshTodos, setRefreshTodos] = useState(false);
 	const [isUpdating, setIsUpdating] = useState(false);
-	const [todoText, setTodoText] = useState('');
+	const [isCreating, setIsCreating] = useState(false);
 	const [searchTerm, setSearchTerm] = useState('');
+	const [todoText, setTodoText] = useState('');
 
-	const { requestAddTodo, isCreating, handleClick } = useRequestAddTodo(
+	const { requestAddTodo } = useRequestAddTodo(
 		todoText,
 		setRefreshTodos,
-		setTodoText,
+		setIsCreating,
 	);
 	const { todoList, isLoading, handleCheck } = useRequestGetTodoList(refreshTodos);
 	const { requestDeleteTodo, isDeleting } = useRequestDeleteTodo(setRefreshTodos);
@@ -46,8 +48,12 @@ export const App = () => {
 	};
 
 	const sortedTodos = getSortedTodos();
+
+	const handleClick = () => {
+		setIsCreating(!isCreating);
+	};
 	return (
-		<div className={styles.App}>
+		<>
 			{isCreating && (
 				<InputForm
 					label={'Создать'}
@@ -56,7 +62,6 @@ export const App = () => {
 					handleSubmit={requestAddTodo}
 				/>
 			)}
-
 			{isLoading ? (
 				<Loader />
 			) : (
@@ -67,19 +72,13 @@ export const App = () => {
 						label={'Добавить задачу'}
 						onClick={handleClick}
 					/>
-					{selectedSort ? (
-						<Button
-							isActive={isCreating || isUpdating || isDeleting}
-							onClick={sortTodos}
-							label={'По созданию'}
-						/>
-					) : (
-						<Button
-							isActive={isCreating || isUpdating || isDeleting}
-							onClick={sortTodos}
-							label={'По алфавиту'}
-						/>
-					)}
+
+					<Button
+						isActive={isCreating || isUpdating || isDeleting}
+						name={'todo-sort-btn'}
+						onClick={sortTodos}
+						label={selectedSort ? 'По созданию' : 'По алфавиту'}
+					/>
 
 					<input
 						placeholder="Поиск..."
@@ -103,6 +102,16 @@ export const App = () => {
 					</div>
 				</>
 			)}
+		</>
+	);
+};
+
+export const App = () => {
+	return (
+		<div className={styles.App}>
+			<Routes>
+				<Route path="/" element={<MainPage />} />
+			</Routes>
 		</div>
 	);
 };
