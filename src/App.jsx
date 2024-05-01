@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import styles from './App.module.css';
-import { Button, Loader, TodoList, InputForm, Select } from './components';
+import { Button, Loader, TodoList, InputForm } from './components';
 import {
 	useRequestAddTodo,
 	useRequestGetTodoList,
@@ -28,13 +28,19 @@ export const App = () => {
 		setSelectedSort(!selectedSort);
 	};
 
-	const handleSearch = (event) => {
-		setSearchTerm(event.target.value.toLowerCase());
+	const handleSearch = ({ target }) => {
+		if (target.value) {
+			setSearchTerm(target.value.toLowerCase());
+		} else {
+			setSearchTerm(target.value)
+		}
 	};
 
-	const filteredTodos = todoList.filter((todo) =>
-		todo.title.toLowerCase().includes(searchTerm),
-	);
+	const filteredTodos = todoList.filter((todo) => {
+		if (todo.title) {
+			return todo.title.toLowerCase().includes(searchTerm);
+		}
+	});
 
 	const getSortedTodos = () => {
 		if (selectedSort) {
@@ -67,19 +73,13 @@ export const App = () => {
 						label={'Добавить задачу'}
 						onClick={handleClick}
 					/>
-					{selectedSort ? (
-						<Button
-							isActive={isCreating || isUpdating || isDeleting}
-							onClick={sortTodos}
-							label={'По созданию'}
-						/>
-					) : (
-						<Button
-							isActive={isCreating || isUpdating || isDeleting}
-							onClick={sortTodos}
-							label={'По алфавиту'}
-						/>
-					)}
+
+					<Button
+						isActive={isCreating || isUpdating || isDeleting}
+						onClick={sortTodos}
+						name={'todo-sort-btn'}
+						label={selectedSort ? 'По созданию' : 'По алфавиту'}
+					/>
 
 					<input
 						placeholder="Поиск..."

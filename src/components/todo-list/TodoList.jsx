@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Button, InputForm, TodoItem } from '..';
 import styles from './TodoList.module.css';
 
-
 export const TodoList = ({
 	todoList,
 	handleCheck,
@@ -12,7 +11,7 @@ export const TodoList = ({
 	isUpdating,
 	setTodoText,
 	setIsUpdating,
-	todoText
+	todoText,
 }) => {
 	const [editingId, setEditingId] = useState(null);
 
@@ -21,11 +20,18 @@ export const TodoList = ({
 		return requestUpdateTodo(id);
 	};
 
+	const onEditTodoTitle = (id) => {
+		const editingTodo = todoList.filter((todo) => id === todo.id);
+		setTodoText(editingTodo[0].title);
+		setIsUpdating(true);
+		setEditingId(id);
+	};
+
 	return (
 		<>
 			{isUpdating && (
 				<InputForm
-				label={'Изменить'}
+					label={'Изменить'}
 					setTodoText={setTodoText}
 					handleSubmit={() => handleUpdate(editingId)}
 					todoText={todoText}
@@ -50,8 +56,7 @@ export const TodoList = ({
 					<Button
 						id={id}
 						onClick={() => {
-							setIsUpdating(true);
-							setEditingId(id);
+							onEditTodoTitle(id);
 						}}
 						isActive={isActive}
 						name={'update-btn'}

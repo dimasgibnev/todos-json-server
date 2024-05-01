@@ -13,7 +13,7 @@ export const InputForm = ({ handleSubmit, todoText, setTodoText, id, label }) =>
 			<input
 				type="text"
 				value={todoText}
-				onChange={(e) => setTodoText(e.target.value.trim())}
+				onChange={(e) => setTodoText(e.target.value)}
 			/>
 			<Button onClick={() => {}} type={'submit'} name={'add-todo'} label={label} />
 		</form>

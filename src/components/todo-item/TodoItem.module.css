@@ -15,12 +15,13 @@
 .todo__content {
 	display: flex;
 	width: 100%;
+	margin-right: 10px;
 }
 .todo__completed {
 	text-decoration: line-through;
 }
 strong {
-	width: 90%;
+	width: 100%;
 }
 span {
 	margin-right: 5px;
