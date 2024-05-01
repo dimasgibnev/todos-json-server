@@ -1,6 +1,6 @@
 import styles from './TodoItem.module.css';
 
-export const TodoItem = ({ index, completed, title, id, handleCheck }) => {
+export const TodoItem = ({ id, index, completed, title, handleCheck }) => {
 	return (
 		<div className={styles.todo}>
 			<div className={styles['todo__content']}>

@@ -30,13 +30,19 @@ const MainPage = () => {
 		setSelectedSort(!selectedSort);
 	};
 
-	const handleSearch = (event) => {
-		setSearchTerm(event.target.value.toLowerCase());
+	const handleSearch = ({ target }) => {
+		if (target.value) {
+			setSearchTerm(target.value.toLowerCase());
+		} else {
+			setSearchTerm(target.value)
+		}
 	};
 
-	const filteredTodos = todoList.filter((todo) =>
-		todo.title.toLowerCase().includes(searchTerm),
-	);
+	const filteredTodos = todoList.filter((todo) => {
+		if (todo.title) {
+			return todo.title.toLowerCase().includes(searchTerm);
+		}
+	});
 
 	const getSortedTodos = () => {
 		if (selectedSort) {
@@ -49,9 +55,13 @@ const MainPage = () => {
 
 	const sortedTodos = getSortedTodos();
 
-	const handleClick = () => {
-		setIsCreating(!isCreating);
-	};
+
+
+	const createTodo =() => {
+		setTodoText('')
+		setIsCreating(!isCreating)
+	}
+
 	return (
 		<>
 			{isCreating && (
@@ -70,13 +80,13 @@ const MainPage = () => {
 						isActive={isCreating || isUpdating || isDeleting}
 						name={'todo-add-btn'}
 						label={'Добавить задачу'}
-						onClick={handleClick}
+						onClick={createTodo}
 					/>
 
 					<Button
 						isActive={isCreating || isUpdating || isDeleting}
-						name={'todo-sort-btn'}
 						onClick={sortTodos}
+						name={'todo-sort-btn'}
 						label={selectedSort ? 'По созданию' : 'По алфавиту'}
 					/>
 

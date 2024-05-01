@@ -1,59 +1,60 @@
-import { useState } from 'react';
-import { Button, InputForm, TodoItem } from '..';
+import { Button, TodoItem } from '..';
 import styles from './TodoList.module.css';
+import { InputForm } from '../input-form/InputForm';
+import { useState } from 'react';
 
-
-export const TodoList = ({
-	todoList,
-	handleCheck,
-	isActive,
-	RequestDeleteTodo,
-	requestUpdateTodo,
-	isUpdating,
-	setTodoText,
-	setIsUpdating,
-	todoText
-}) => {
-	const [editingId, setEditingId] = useState(null);
-
-	const handleUpdate = (id) => {
-		setIsUpdating(false);
-		return requestUpdateTodo(id);
+export const TodoList = (props) => {
+	const [editId, setEditId] = useState(null);
+	
+	const onEditTodoTitle = (id) => {
+		const [editingTodo] = props.todoList.filter((todo) => id === todo.id);
+		props.setTodoText(editingTodo.title);
+		props.setIsUpdating(true);
 	};
-
+	const handleUpdate = (id) => {
+		setEditId(id);
+		props.setIsUpdating(false);
+		return props.requestUpdateTodo(id);
+	};
 	return (
 		<>
-			{isUpdating && (
+			{props.isUpdating && (
 				<InputForm
-				label={'Изменить'}
-					setTodoText={setTodoText}
-					handleSubmit={() => handleUpdate(editingId)}
-					todoText={todoText}
+					label={'Изменить'}
+					setTodoText={props.setTodoText}
+					handleSubmit={() => handleUpdate(editId)}
+					todoText={props.todoText}
 				/>
 			)}
-			{todoList.map(({ id, title, completed }, index) => (
+			{props.todoList.map(({ id, title, completed }, index) => (
 				<div className={styles['todo-container']} key={id}>
 					<TodoItem
 						id={id}
 						title={title}
 						completed={completed}
 						index={index}
-						handleCheck={handleCheck}
+						handleCheck={props.handleCheck}
+						setIsUpdating={props.setIsUpdating}
+						isUpdating={props.isUpdating}
+						setTodoText={props.setTodoText}
+						requestUpdateTodo={props.requestUpdateTodo}
+						todoText={props.todoText}
+						RequestDeleteTodo={props.RequestDeleteTodo}
+						todoList={props.todoList}
 					/>
 					<Button
 						id={id}
-						onClick={RequestDeleteTodo}
-						isActive={isActive}
+						onClick={props.RequestDeleteTodo}
+						isActive={props.isActive}
 						name={'delete-btn'}
 						label={'Удалить'}
 					/>
 					<Button
 						id={id}
 						onClick={() => {
-							setIsUpdating(true);
-							setEditingId(id);
+							onEditTodoTitle(id);
 						}}
-						isActive={isActive}
+						isActive={props.isActive}
 						name={'update-btn'}
 						label={'Изменить'}
 					/>
