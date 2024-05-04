@@ -4,3 +4,7 @@ export * from './todo-item/TodoItem';
 export * from './button/Button';
 export * from './input-form/InputForm';
 export * from './select/Select';
+export * from './main-page/MainPage.jsx'
+export * from './todo/Todo.jsx'
+export * from './todos/Todos.jsx'
+export * from './todo-edit/TodoEdit.jsx'

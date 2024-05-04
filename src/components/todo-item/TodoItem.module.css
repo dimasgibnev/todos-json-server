@@ -24,6 +24,7 @@ strong {
 	width: 100%;
 }
 span {
+	font-weight: 800;
 	margin-right: 5px;
 }
 .checkbox {
@@ -55,4 +56,8 @@ span {
 	border: solid white;
 	border-width: 0 2px 2px 0;
 	transform: rotate(45deg);
+}
+.link {
+	width: 100%;
+	text-decoration: none;
 }

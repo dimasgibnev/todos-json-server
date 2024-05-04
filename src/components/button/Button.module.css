@@ -27,3 +27,10 @@
 	left: 10px;
 	top: 100px;
 }
+
+.MainPage__todo-sort-btn {
+	width: 145px;
+	position: absolute;
+	left: 10px;
+	
+}
