@@ -1,12 +1,15 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { TodoItem } from '../todo-item/TodoItem';
-import { useRequestGetTodoList } from '../../hooks';
+import { useRequestGetTodoList, useRequestDeleteTodo } from '../../hooks';
 import { useState } from 'react';
+import { Button } from '../button/Button';
 
 export const Todo = () => {
 	const [todos, setTodos] = useState([]);
 	const [refreshTodos, setRefreshTodos] = useState(false);
-	const { todoId } = useParams();
+	const current = useParams();
+
+	const { requestDeleteTodo, isDeleting } = useRequestDeleteTodo(setRefreshTodos);
 
 	const handleCheck = (id) => {
 		const updatedList = todos.map((todo) => {
@@ -17,24 +20,41 @@ export const Todo = () => {
 		});
 		setTodos(updatedList);
 	};
-	useRequestGetTodoList(refreshTodos, setTodos, todoId);
 
-	// const currentTodo = todos.filter((todo) =>{ return todo.id === todoId});
-	console.log(todoId);
+	const { isLoading } = useRequestGetTodoList(refreshTodos, setTodos, current.id);
+
 	return (
 		<div style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
-			{todos.map(({ id, title, completed }, index) => {
-				return (
+			{isLoading ? (
+				<div>Loading</div>
+			) : (
+				<>
 					<TodoItem
-						id={id}
-						title={title}
-						completed={completed}
+						id={current.id}
+						title={todos.title}
+						completed={todos.completed}
 						handleCheck={handleCheck}
-						key={id}
-						index={index}
+						index={0}
 					/>
-				);
-			})}
+					<Link to={`/todos/${current.id}/edit`}>
+						<Button
+							id={current.id}
+							onClick={() => {}}
+							name={'update-btn'}
+							label={'Изменить'}
+						/>
+					</Link>
+					<Link to={'/todos'}>
+						<Button
+							id={current.id}
+							onClick={requestDeleteTodo}
+							isActive={isDeleting}
+							name={'delete-btn'}
+							label={'Удалить'}
+						/>
+					</Link>
+				</>
+			)}
 		</div>
 	);
 };

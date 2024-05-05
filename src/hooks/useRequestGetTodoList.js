@@ -11,6 +11,7 @@ export const useRequestGetTodoList = (refreshTodos, setTodoList, id = '') => {
 			.catch((error) => console.log('Ошибка запроса', error))
 			.finally(() => setIsLoading(false));
 	}, [refreshTodos]);
+	
 
 	return { isLoading };
 };

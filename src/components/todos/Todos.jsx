@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { TodoList } from '../todo-list/TodoList';
 import { InputForm } from '../input-form/InputForm';
 import { Button } from '../button/Button';
@@ -111,7 +111,7 @@ export const Todos = (currentPage) => {
 				setTodoText={setTodoText}
 				isUpdating={isUpdating}
 				requestUpdateTodo={requestUpdateTodo}
-				RequestDeleteTodo={requestDeleteTodo}
+				requestDeleteTodo={requestDeleteTodo}
 				isActive={isCreating || isUpdating || isDeleting}
 				todoList={sortedTodos}
 				handleCheck={handleCheck}

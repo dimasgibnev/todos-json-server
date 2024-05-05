@@ -1,47 +1,19 @@
-import { useState } from 'react';
-import { Button, InputForm, TodoItem } from '..';
+import { Button,  TodoItem } from '..';
 import styles from './TodoList.module.css';
+import { Link } from 'react-router-dom';
+
 
 export const TodoList = ({
 	todoList,
 	handleCheck,
 	isActive,
-	RequestDeleteTodo,
-	requestUpdateTodo,
-	isUpdating,
-	setTodoText,
-	setIsUpdating,
-	todoText,
 	currentPage,
+	requestDeleteTodo
 }) => {
-	const [editingId, setEditingId] = useState(null);
 
-	const handleUpdate = (id) => {
-		setIsUpdating(false);
-		return requestUpdateTodo(id);
-	};
-
-	const onEditTodoTitle = (id) => {
-		const editingTodo = todoList.filter((todo) => id === todo.id);
-		setTodoText(editingTodo[0].title);
-		setIsUpdating(true);
-		setEditingId(id);
-	};
-
-	if ( currentPage === 'MainPage') {
-		
-	}
 
 	return (
 		<>
-			{isUpdating && (
-				<InputForm
-					label={'Изменить'}
-					setTodoText={setTodoText}
-					handleSubmit={() => handleUpdate(editingId)}
-					todoText={todoText}
-				/>
-			)}
 			{TodoList.length > 0
 				? todoList.map(({ id, title, completed }, index) => (
 						<div className={styles['todo-container']} key={id}>
@@ -60,20 +32,19 @@ export const TodoList = ({
 								<div>
 									<Button
 										id={id}
-										onClick={RequestDeleteTodo}
+										onClick={requestDeleteTodo}
 										isActive={isActive}
 										name={'delete-btn'}
 										label={'Удалить'}
 									/>
-									<Button
-										id={id}
-										onClick={() => {
-											onEditTodoTitle(id);
-										}}
-										isActive={isActive}
-										name={'update-btn'}
-										label={'Изменить'}
-									/>
+									<Link to={`/todos/${id}/edit`}>
+						<Button
+							id={id}
+							onClick={() => {}}
+							name={'update-btn'}
+							label={'Изменить'}
+						/>
+					</Link>
 								</div>
 							) : (
 								''

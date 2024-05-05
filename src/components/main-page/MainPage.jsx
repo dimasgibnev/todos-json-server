@@ -3,11 +3,7 @@ import styles from './MainPage.module.css';
 import { Button } from '../button/Button';
 import { Loader } from '../loader/Loader';
 import { TodoList } from '../todo-list/TodoList';
-import {
-	useRequestGetTodoList,
-	useRequestDeleteTodo,
-	useRequestUpdateTodo,
-} from '../../hooks';
+import { useRequestGetTodoList } from '../../hooks';
 
 export const MainPage = (currentPage) => {
 	const [todoList, setTodoList] = useState([]);
@@ -18,8 +14,6 @@ export const MainPage = (currentPage) => {
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const { isLoading } = useRequestGetTodoList(refreshTodos, setTodoList);
-	const { requestDeleteTodo, isDeleting } = useRequestDeleteTodo(setRefreshTodos);
-	const { requestUpdateTodo } = useRequestUpdateTodo(setRefreshTodos, todoText);
 
 	const sortTodos = () => {
 		setSelectedSort(!selectedSort);
@@ -66,10 +60,8 @@ export const MainPage = (currentPage) => {
 				<Loader />
 			) : (
 				<>
-
-
 					<Button
-						isActive={ isUpdating || isDeleting}
+						isActive={isUpdating}
 						onClick={sortTodos}
 						name={'MainPage__todo-sort-btn'}
 						label={selectedSort ? 'По созданию' : 'По алфавиту'}
@@ -88,9 +80,8 @@ export const MainPage = (currentPage) => {
 							setIsUpdating={setIsUpdating}
 							setTodoText={setTodoText}
 							isUpdating={isUpdating}
-							requestUpdateTodo={requestUpdateTodo}
-							RequestDeleteTodo={requestDeleteTodo}
-							isActive={ isUpdating || isDeleting}
+							
+							isActive={isUpdating}
 							todoList={sortedTodos}
 							handleCheck={handleCheck}
 							todoText={todoText}
