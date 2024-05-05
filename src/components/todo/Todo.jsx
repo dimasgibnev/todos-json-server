@@ -29,6 +29,9 @@ export const Todo = () => {
 				<div>Loading</div>
 			) : (
 				<>
+					<Link to={'/todos'}>
+						<Button onClick={() => {}} name={'back-btn'} label={'Назад'} />
+					</Link>
 					<TodoItem
 						id={current.id}
 						title={todos.title}

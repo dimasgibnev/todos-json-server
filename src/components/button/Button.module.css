@@ -32,5 +32,11 @@
 	width: 145px;
 	position: absolute;
 	left: 10px;
-	
+
+}
+.back-btn {
+	width: 145px;
+	position: absolute;
+	left: 10px;
+	top: 10px;
 }

@@ -1,8 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
-import { MainPage, Todos, Todo, TodoEdit } from './components';
+import { MainPage, Todos, Todo, TodoEdit, TodoNotFound } from './components';
 
 export const App = () => {
-
 
 	return (
 		<Routes>
@@ -30,6 +29,7 @@ export const App = () => {
 					<TodoEdit currentPage={'TodoEdit'} />
 				}
 			/>
+			<Route path="/404" element={TodoNotFound}/>
 		</Routes>
 	);
 };
