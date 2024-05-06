@@ -1,26 +1,20 @@
 import { useState } from 'react';
 import { TodoList } from '../todo-list/TodoList';
+import { InputForm } from '../input-form/InputForm';
 import { Button } from '../button/Button';
-import {
-	useRequestGetTodoList,
-	useRequestAddTodo,
-
-} from '../../hooks';
-import styles from './Todos.module.css'
+import { useRequestGetTodoList, useRequestAddTodo } from '../../hooks';
+import styles from './Todos.module.css';
 
 export const Todos = (currentPage) => {
 	const [todos, setTodos] = useState([]);
 	const [selectedSort, setSelectedSort] = useState(false);
 	const [refreshTodos, setRefreshTodos] = useState(false);
 	const [isUpdating, setIsUpdating] = useState(false);
+	const [isCreating, setIsCreating] = useState(false);
 	const [todoText, setTodoText] = useState('');
 	const [searchTerm, setSearchTerm] = useState('');
 
-	const { requestAddTodo, isCreating, handleClick } = useRequestAddTodo(
-		todoText,
-		setRefreshTodos,
-		setTodoText,
-	);
+	const { requestAddTodo } = useRequestAddTodo(todoText, setRefreshTodos, setTodoText);
 	useRequestGetTodoList(refreshTodos, setTodos);
 
 	const sortTodos = () => {
@@ -52,6 +46,10 @@ export const Todos = (currentPage) => {
 		setTodos(updatedList);
 	};
 
+	const handleClick = () => {
+		setIsCreating((prev) => !prev);
+	};
+
 	const getSortedTodos = () => {
 		if (selectedSort) {
 			return [...todos].sort((a, b) => a['title'].localeCompare(b['title']));
@@ -73,13 +71,13 @@ export const Todos = (currentPage) => {
 			}}
 		>
 			<Button
-				isActive={isCreating || isUpdating }
+				isActive={isCreating || isUpdating}
 				name={'todo-add-btn'}
 				label={'Добавить задачу'}
 				onClick={handleClick}
 			/>
 			<Button
-				isActive={isCreating || isUpdating }
+				isActive={isCreating || isUpdating}
 				onClick={sortTodos}
 				name={'todo-sort-btn'}
 				label={selectedSort ? 'По созданию' : 'По алфавиту'}
@@ -93,12 +91,22 @@ export const Todos = (currentPage) => {
 				onChange={handleSearch}
 			/>
 
+			{isCreating && (
+				<InputForm
+					label={'Создать'}
+					setTodoText={setTodoText}
+					todoText={todoText}
+					handleSubmit={requestAddTodo}
+					isCreating={setIsCreating}
+				/>
+			)}
+
 			<TodoList
 				currentPage={currentPage}
 				setIsUpdating={setIsUpdating}
 				setTodoText={setTodoText}
 				isUpdating={isUpdating}
-				isActive={isCreating || isUpdating }
+				isActive={isCreating || isUpdating}
 				todoList={sortedTodos}
 				handleCheck={handleCheck}
 				todoText={todoText}

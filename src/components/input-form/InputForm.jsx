@@ -4,7 +4,7 @@ import { Button } from '..';
 import styles from './InputForm.module.css';
 
 
-export const InputForm = ({ handleSubmit, todoText, setTodoText, id, label }) => {
+export const InputForm = ({ handleSubmit, todoText, setTodoText, id, label, isCreating }) => {
 	const navigate = useNavigate()
 
 	return (
@@ -13,6 +13,7 @@ export const InputForm = ({ handleSubmit, todoText, setTodoText, id, label }) =>
 				e.preventDefault();
 				handleSubmit(id);
 				navigate('/')
+				isCreating(false)
 			}}
 			className={styles.form}
 		>
