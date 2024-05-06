@@ -1,17 +1,12 @@
 {
   "todos": [
     {
-      "title": "sda",
-      "completed": false,
-      "id": 1
-    },
-    {
-      "title": "sda",
+      "title": "Сделать маршрутизацию",
       "completed": false,
       "id": 2
     },
     {
-      "title": "sda",
+      "title": "Исправить ошибки",
       "completed": false,
       "id": 3
     }

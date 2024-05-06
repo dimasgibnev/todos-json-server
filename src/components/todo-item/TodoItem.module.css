@@ -5,12 +5,13 @@
 	border-radius: 5px;
 	background-color: white;
 	width: 600px;
-	height: 50px;
+	height: auto;
 	margin-bottom: 10px;
 	padding: 10px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.154);
 	align-items: center;
 	margin-right: 10px;
+	overflow:hidden;
 }
 
 .todo__content {
@@ -25,6 +26,7 @@ strong {
 	width: 100%;
 }
 span {
+	font-weight: 800;
 	margin-right: 5px;
 }
 .checkbox {
@@ -56,4 +58,8 @@ span {
 	border: solid white;
 	border-width: 0 2px 2px 0;
 	transform: rotate(45deg);
+}
+.link {
+	width: 100%;
+	text-decoration: none;
 }
