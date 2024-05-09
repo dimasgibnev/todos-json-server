@@ -1,11 +1,11 @@
-export const useRequestUpdateTodo = (setRefreshTodos, todoText) => {
-	const requestUpdateTodo = (id) => {
+export const useRequestUpdateTodo = (setRefreshTodos, title) => {
+	const requestUpdateTodo = (id, completed) => {
 		fetch(`http://localhost:3005/todos/${id}`, {
-			method: 'PUT',
+			method: 'PATCH',
 			headers: { 'Content-Type': 'application/json;charset=utf-8' },
 			body: JSON.stringify({
-				title: todoText,
-				completed: false,
+				title,
+				completed
 			}),
 		})
 			.then((rawResponse) => rawResponse.json())

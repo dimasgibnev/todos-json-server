@@ -1,31 +1,34 @@
-import { Link, useParams } from 'react-router-dom';
-import { TodoItem } from '../todo-item/TodoItem';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { TodoItem } from '../../components/todo-item/TodoItem';
 import { useRequestGetTodoList, useRequestDeleteTodo } from '../../hooks';
-import { useState } from 'react';
-import { Button } from '../button/Button';
+import { useState, useEffect } from 'react';
+import { Button } from '../../components/button/Button';
+import styles from './Todo.module.css';
+import { Loader } from '../../components/loader/Loader';
 
 export const Todo = () => {
-	const [todos, setTodos] = useState([]);
+	const navigate = useNavigate();
+	const [todo, setTodo] = useState({});
 	const [refreshTodos, setRefreshTodos] = useState(false);
 	const current = useParams();
 
-	const { isLoading } = useRequestGetTodoList(refreshTodos, setTodos, current.id);
+	const { isLoading } = useRequestGetTodoList(refreshTodos, setTodo, current.id);
 	const { requestDeleteTodo, isDeleting } = useRequestDeleteTodo(setRefreshTodos);
 
 	const handleCheck = (id) => {
-		const updatedList = todos.map((todo) => {
-			if (todo.id === id) {
-				return { ...todo, completed: !todo.completed };
-			}
-			return todo;
-		});
-		setTodos(updatedList);
+		setTodo((prev) => ({ ...prev, completed: !prev.completed }));
 	};
 
+	useEffect(() => {
+		if (todo.title === undefined) {
+			navigate('/404');
+		}
+	}, [todo.id, navigate]);
+
 	return (
-		<div style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
+		<div className={styles.todoContainer}>
 			{isLoading ? (
-				<div>Loading</div>
+				<Loader />
 			) : (
 				<>
 					<Link to={'/'}>
@@ -33,12 +36,12 @@ export const Todo = () => {
 					</Link>
 					<TodoItem
 						id={current.id}
-						title={todos.title}
-						completed={todos.completed}
+						title={todo.title}
+						completed={todo.completed}
 						handleCheck={handleCheck}
 						index={0}
 					/>
-					<Link to={`/${current.id}/edit`}>
+					<Link to={`/task/${current.id}/edit`}>
 						<Button
 							id={current.id}
 							onClick={() => {}}

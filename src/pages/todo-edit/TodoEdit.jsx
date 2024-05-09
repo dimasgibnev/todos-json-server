@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { InputForm } from '../input-form/InputForm';
+import { InputForm } from '../../components/input-form/InputForm';
 import { useRequestUpdateTodo, useRequestGetTodoList } from '../../hooks';
 import { useParams, Link } from 'react-router-dom';
-import { Button } from '../button/Button';
+import { Button } from '../../components/button/Button';
 
 export const TodoEdit = () => {
 	const current = useParams();
@@ -17,12 +17,16 @@ export const TodoEdit = () => {
 		setTodoText(todo.title);
 	}, [todo]);
 
+	const handleSubmit = (id) => {
+		requestUpdateTodo(id);
+	};
+
 	return (
 		<div>
 			<InputForm
 				label={'Изменить'}
 				setTodoText={setTodoText}
-				handleSubmit={() => requestUpdateTodo(current.id)}
+				handleSubmit={handleSubmit}
 				todoText={todoText}
 			/>
 			<Link to={'/'}>
